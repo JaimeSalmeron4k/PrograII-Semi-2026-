@@ -66,14 +66,81 @@
         app:layout_constraintTop_toBottomOf="@+id/lblNum2"
         app:layout_constraintVertical_bias="0.078" />
 
+    <RadioGroup
+        android:id="@+id/optOpciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.307"
+        app:layout_constraintStart_toEndOf="@+id/lblRespuesta"
+        app:layout_constraintTop_toBottomOf="@+id/txtNum2">
+
+        <RadioButton
+            android:id="@+id/optSuma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="SUMA" />
+
+        <RadioButton
+            android:id="@+id/optResta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RESTA" />
+
+        <RadioButton
+            android:id="@+id/optMultiplicar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MULTIPLICACION" />
+
+        <RadioButton
+            android:id="@+id/optDivision"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DIVISION" />
+
+        <RadioButton
+            android:id="@+id/optFactorial"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FACTORIAL" />
+
+        <RadioButton
+            android:id="@+id/optPorcentaje"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PORCENTAJE" />
+
+        <RadioButton
+            android:id="@+id/optExponenciacion"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EXPONENCIACION" />
+
+        <RadioButton
+            android:id="@+id/optRaiz"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RAIZ" />
+
+
+    </RadioGroup>
+
     <Button
         android:id="@+id/btnCalcular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CALCULAR"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNum2"
-        app:layout_constraintVertical_bias="0.15"
-        tools:layout_editor_absoluteX="-16dp" />
+        app:layout_constraintTop_toBottomOf="@+id/optOpciones"
+        app:layout_constraintVertical_bias="0.081"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
