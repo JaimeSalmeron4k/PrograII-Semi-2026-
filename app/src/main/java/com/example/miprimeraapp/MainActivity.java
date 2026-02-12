@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -15,8 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
     TextView tempVal;
     Button btn;
-    RadioGroup radioGroup;
-    RadioButton opt;
+    Spinner spn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,18 +34,20 @@ public class MainActivity extends AppCompatActivity {
 
         double respuesta = 0;
 
-        radioGroup = findViewById(R.id.optOpciones);
-        if(radioGroup.getCheckedRadioButtonId()==R.id.optSuma) {
-            respuesta = num1 + num2;
-        }
-        if(radioGroup.getCheckedRadioButtonId()==R.id.optResta) {
-            respuesta = num1 - num2;
-        }
-        if(radioGroup.getCheckedRadioButtonId()==R.id.optMultiplicar) {
-            respuesta = num1 * num2;
-        }
-        if(radioGroup.getCheckedRadioButtonId()==R.id.optDividir) {
-            respuesta = num1 / num2;
+        spn = findViewById(R.id.cboOpciones);
+        switch (spn.getSelectedItemPosition()){
+            case 0: //suma
+                respuesta = num1 + num2;
+                break;
+            case 1: //Resta
+                respuesta = num1 - num2;
+                break;
+            case 2: //Multiplicacion
+                respuesta = num1 * num2;
+                break;
+            case 3: //division
+                respuesta = num1 / num2;
+                break;
         }
         tempVal = findViewById(R.id.lblRespuesta);
         tempVal.setText("Respuesta: "+ respuesta);
