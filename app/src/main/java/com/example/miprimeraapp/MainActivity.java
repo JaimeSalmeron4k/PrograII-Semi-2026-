@@ -3,6 +3,9 @@ package com.example.miprimeraapp;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -12,67 +15,43 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+
+    TabHost tbh;
     TextView tempVal;
+    Spinner spn;
     Button btn;
-    RadioButton opt;
+    Double valores[] = new Double[] {1.0, 0.85, 7.67, 26.42, 36.80, 495.77};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn = findViewById(R.id.btnCalcular);
-        btn.setOnClickListener(v ->calcular());
+        tbh = findViewById(R.id.tbhConversores);
+        tbh.setup();
+
+        tbh.addTab(tbh.newTabSpec("Monedas").setContent(R.id.tabMonedas).setIndicator("MONEDAS", null));
+        tbh.addTab(tbh.newTabSpec("Longitud").setContent(R.id.tabLongitud).setIndicator("LONGITUD", null));
+        tbh.addTab(tbh.newTabSpec("Volumen").setContent(R.id.tabVolumen).setIndicator("VOLUMEN", null));
+        tbh.addTab(tbh.newTabSpec("Masa").setContent(R.id.tabMasa).setIndicator("MASA", null));
+
+        btn = findViewById(R.id.btnMonedasConvertir);
+        btn.setOnClickListener(v->convertirMonedas());
     }
-    private void calcular(){
-        tempVal = findViewById(R.id.txtNum1);
-        double num1 = Double.parseDouble(tempVal.getText().toString());
+    private void convertirMonedas(){
+        spn = findViewById(R.id.spnMonedasDe);
+        int de = spn.getSelectedItemPosition();
 
-        tempVal = findViewById(R.id.txtNum2);
-        double num2 = Double.parseDouble(tempVal.getText().toString());
+        spn = findViewById(R.id.spnMonedasA);
+        int a = spn.getSelectedItemPosition();
 
-        double respuesta = 0;
+        tempVal = findViewById(R.id.txtMonedasCantidad);
+        double cantidad = Double.parseDouble(tempVal.getText().toString());
+        double respuesta = conversor(de, a, cantidad);
 
-        opt = findViewById(R.id.optSuma);
-        if(opt.isChecked()) {
-            respuesta = num1 + num2;
-        }
-        opt = findViewById(R.id.optResta);
-        if(opt.isChecked()) {
-            respuesta = num1 - num2;
-        }
-        opt = findViewById(R.id.optMultiplicar);
-        if(opt.isChecked()) {
-            respuesta = num1 * num2;
-        }
-        opt = findViewById(R.id.optDivision);
-        if(opt.isChecked()) {
-            respuesta = num1 / num2;
-        }
-        opt = findViewById(R.id.optFactorial);
-        if(opt.isChecked()) {
-            int limite = (int) num1;
-            double acumulador = 1;
-            for (int i = 1; i <= limite; i++) {
-                acumulador = acumulador * i;
-                respuesta = acumulador;
-            }
-        }
-        opt = findViewById(R.id.optPorcentaje);
-        if(opt.isChecked()) {
-            respuesta = (num1 * num2) /100;
-        }
-            opt = findViewById(R.id.optExponenciacion);
-            if(opt.isChecked()) {
-                double base = num1;
-                double exponente = num2;
-                respuesta = Math.pow(base, exponente);
-        }
-        opt = findViewById(R.id.optRaiz);
-        if(opt.isChecked()) {
-            respuesta = Math.sqrt(num1);
-        }
-
-        tempVal = findViewById(R.id.lblRespuesta);
+        tempVal = findViewById(R.id.lblMonedasRespuesta);
         tempVal.setText("Respuesta: "+ respuesta);
+    }
+    double conversor(int de, int a, double cantidad){
+        return valores[a]/valores[de] * cantidad;
     }
 }
