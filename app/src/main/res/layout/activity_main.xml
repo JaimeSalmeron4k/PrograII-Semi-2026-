@@ -1,70 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/lblTipo"
-        android:text="TIPO:"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Spinner
-        android:entries="@array/tipo"
-        android:id="@+id/spnTipo"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="60dp"
+    <TabHost
+        android:id="@+id/tbhParcial"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/lblDe"
-        android:text="DE:"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Spinner
-        android:id="@+id/spnDe"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="60dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/lblA"
-        android:text="A:"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Spinner
-        android:id="@+id/spnA"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="100dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <EditText
-        android:id="@+id/txtCantidad"
-        android:layout_marginTop="140dp"
-        android:hint="Cantidad a convertir"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/lblRespuesta"
-        android:layout_marginTop="200dp"
-        android:layout_marginLeft="20dp"
-        android:text="Respuesta: ?"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/btnConvertir"
-        android:layout_marginTop="240dp"
-        android:text="CONVERTIR"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/tabAgua"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="20dp">
+
+                    <TextView android:id="@+id/lblInstruccionAgua" android:text="Metros cúbicos consumidos:" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                    <EditText android:id="@+id/txtAguaConsumo" android:layout_below="@id/lblInstruccionAgua" android:hint="Ej: 25" android:inputType="numberDecimal" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                    <Button android:id="@+id/btnAguaCalcular" android:layout_below="@id/txtAguaConsumo" android:layout_marginTop="20dp" android:text="CALCULAR PAGO" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/lblAguaTotal" android:layout_below="@id/btnAguaCalcular" android:layout_marginTop="20dp" android:text="Total a Pagar: $0.00" android:textSize="22sp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/tabArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="20dp">
+
+                    <TextView android:id="@+id/lblAreaDe" android:text="DE:" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Spinner android:id="@+id/spnAreaDe" android:entries="@array/unidades_area" android:layout_toRightOf="@id/lblAreaDe" android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+                    <TextView android:id="@+id/lblAreaA" android:text="A:" android:layout_below="@id/lblAreaDe" android:layout_marginTop="20dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Spinner android:id="@+id/spnAreaA" android:entries="@array/unidades_area" android:layout_toRightOf="@id/lblAreaA" android:layout_below="@id/spnAreaDe" android:layout_marginTop="10dp" android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+                    <EditText android:id="@+id/txtAreaCantidad" android:layout_below="@id/spnAreaA" android:layout_marginTop="20dp" android:hint="Cantidad a convertir" android:inputType="numberDecimal" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                    <Button android:id="@+id/btnAreaConvertir" android:text="CONVERTIR ÁREA" android:layout_below="@id/txtAreaCantidad" android:layout_marginTop="20dp" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/lblAreaRespuesta" android:text="Resultado: ?" android:layout_below="@id/btnAreaConvertir" android:layout_marginTop="20dp" android:textSize="20sp" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
 </RelativeLayout>

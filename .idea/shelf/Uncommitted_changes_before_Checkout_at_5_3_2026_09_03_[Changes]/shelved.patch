@@ -1,0 +1,224 @@
+Index: app/src/main/java/com/example/miprimeraapp/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.miprimeraapp;\r\n\r\nimport android.os.Bundle;\r\nimport android.widget.Button;\r\nimport android.widget.RadioButton;\r\nimport android.widget.RadioGroup;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n    TextView tempVal;\r\n    Button btn;\r\n    Spinner spn;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n\r\n        btn = findViewById(R.id.btnCalcular);\r\n        btn.setOnClickListener(v->calcular());\r\n    }\r\n    private void calcular(){\r\n        tempVal = findViewById(R.id.txtNum1);\r\n        Double num1 = Double.parseDouble(tempVal.getText().toString());\r\n\r\n        tempVal = findViewById(R.id.txtNum2);\r\n        Double num2 = Double.parseDouble(tempVal.getText().toString());\r\n\r\n        double respuesta = 0;\r\n\r\n        spn = findViewById(R.id.cboOpciones);\r\n        switch (spn.getSelectedItemPosition()){\r\n            case 0: //suma\r\n                respuesta = num1 + num2;\r\n                break;\r\n            case 1: //Resta\r\n                respuesta = num1 - num2;\r\n                break;\r\n            case 2: //Multiplicacion\r\n                respuesta = num1 * num2;\r\n                break;\r\n            case 3: //division\r\n                respuesta = num1 / num2;\r\n                break;\r\n        }\r\n        tempVal = findViewById(R.id.lblRespuesta);\r\n        tempVal.setText(\"Respuesta: \"+ respuesta);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/miprimeraapp/MainActivity.java b/app/src/main/java/com/example/miprimeraapp/MainActivity.java
+--- a/app/src/main/java/com/example/miprimeraapp/MainActivity.java	(revision 7c1edba84e4cb8137dc37c2e7cc6566a6165c0f6)
++++ b/app/src/main/java/com/example/miprimeraapp/MainActivity.java	(date 1771603732259)
+@@ -1,5 +1,10 @@
+ package com.example.miprimeraapp;
+ 
++import android.graphics.Color;
++import android.hardware.Sensor;
++import android.hardware.SensorEvent;
++import android.hardware.SensorEventListener;
++import android.hardware.SensorManager;
+ import android.os.Bundle;
+ import android.widget.Button;
+ import android.widget.RadioButton;
+@@ -15,41 +20,63 @@
+ 
+ public class MainActivity extends AppCompatActivity {
+     TextView tempVal;
+-    Button btn;
+-    Spinner spn;
++    SensorManager sensorManager;
++    Sensor sensor;
++    SensorEventListener sensorEventListener;
++
++    @Override
++    protected void onPause() {
++        detener();
++        super.onPause();
++    }
++
++    @Override
++    protected void onResume() {
++        iniciar();
++        super.onResume();
++    }
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main);
+-
+-        btn = findViewById(R.id.btnCalcular);
+-        btn.setOnClickListener(v->calcular());
++        sensorLuz();
++    }
++    private void iniciar(){
++        sensorManager.registerListener(sensorEventListener, sensor, 2000*1000);
++    }
++    private void detener(){
++        sensorManager.unregisterListener(sensorEventListener);
+     }
+-    private void calcular(){
+-        tempVal = findViewById(R.id.txtNum1);
+-        Double num1 = Double.parseDouble(tempVal.getText().toString());
+-
+-        tempVal = findViewById(R.id.txtNum2);
+-        Double num2 = Double.parseDouble(tempVal.getText().toString());
+-
+-        double respuesta = 0;
++    private void sensorLuz(){
++        tempVal = findViewById(R.id.lblSensorLuz);
++        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
++        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
++        if(sensor==null){
++            tempVal.setText("No dispones del sensor de Luz");
++            finish();
++        }
++        sensorEventListener = new SensorEventListener() {
++            @Override
++            public void onSensorChanged(SensorEvent sensorEvent) {
++                double valor = sensorEvent.values[0];
++                tempVal.setText("Luz: "+ valor);
++                int color = Color.BLACK;
++                if(valor>=0 && valor<=50){
++                    color = Color.GRAY;
++                }
++                if(valor>=51 && valor<=100){
++                    color = Color.YELLOW;
++                }
++                if (valor>=0 && valor<150){
++                    color = Color.BLUE;
++                }
++                getWindow().getDecorView().setBackgroundColor(color);
++            }
++            @Override
++            public void onAccuracyChanged(Sensor sensor, int i) {
+ 
+-        spn = findViewById(R.id.cboOpciones);
+-        switch (spn.getSelectedItemPosition()){
+-            case 0: //suma
+-                respuesta = num1 + num2;
+-                break;
+-            case 1: //Resta
+-                respuesta = num1 - num2;
+-                break;
+-            case 2: //Multiplicacion
+-                respuesta = num1 * num2;
+-                break;
+-            case 3: //division
+-                respuesta = num1 / num2;
+-                break;
+-        }
+-        tempVal = findViewById(R.id.lblRespuesta);
+-        tempVal.setText("Respuesta: "+ respuesta);
++            }
++        };
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".MainActivity\">\r\n\r\n    <TextView\r\n        android:id=\"@+id/lblNum1\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"NUM 1: \"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.091\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.068\" />\r\n\r\n    <EditText\r\n        android:id=\"@+id/txtNum1\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:hint=\"Escribe un numero\"\r\n        android:layout_marginLeft=\"90dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.056\"\r\n        tools:layout_editor_absoluteX=\"95dp\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/lblNum2\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Num 2:\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.091\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/lblNum1\"\r\n        app:layout_constraintVertical_bias=\"0.063\" />\r\n\r\n    <EditText\r\n        android:id=\"@+id/txtNum2\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"90dp\"\r\n        android:layout_marginTop=\"15dp\"\r\n        android:hint=\"Escribe un numero\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/txtNum1\"\r\n        app:layout_constraintVertical_bias=\"0.0\"\r\n        tools:layout_editor_absoluteX=\"0dp\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/lblRespuesta\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Respuesta: ?\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.091\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/lblNum2\"\r\n        app:layout_constraintVertical_bias=\"0.169\" />\r\n\r\n    <Spinner\r\n        android:id=\"@+id/cboOpciones\"\r\n        android:entries=\"@array/opciones\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"35dp\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/btnCalcular\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/txtNum2\"\r\n        app:layout_constraintVertical_bias=\"0.26\"\r\n        tools:layout_editor_absoluteX=\"16dp\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/btnCalcular\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"CALCULAR\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/txtNum2\"\r\n        app:layout_constraintVertical_bias=\"0.264\"\r\n        tools:layout_editor_absoluteX=\"0dp\" />\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+--- a/app/src/main/res/layout/activity_main.xml	(revision 7c1edba84e4cb8137dc37c2e7cc6566a6165c0f6)
++++ b/app/src/main/res/layout/activity_main.xml	(date 1771603706208)
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/main"
+@@ -8,82 +8,10 @@
+     tools:context=".MainActivity">
+ 
+     <TextView
+-        android:id="@+id/lblNum1"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="NUM 1: "
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.091"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintVertical_bias="0.068" />
+-
+-    <EditText
+-        android:id="@+id/txtNum1"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:hint="Escribe un numero"
+-        android:layout_marginLeft="90dp"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintVertical_bias="0.056"
+-        tools:layout_editor_absoluteX="95dp" />
+-
+-    <TextView
+-        android:id="@+id/lblNum2"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="Num 2:"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.091"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/lblNum1"
+-        app:layout_constraintVertical_bias="0.063" />
+-
+-    <EditText
+-        android:id="@+id/txtNum2"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_marginLeft="90dp"
+-        android:layout_marginTop="15dp"
+-        android:hint="Escribe un numero"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/txtNum1"
+-        app:layout_constraintVertical_bias="0.0"
+-        tools:layout_editor_absoluteX="0dp" />
+-
+-    <TextView
+-        android:id="@+id/lblRespuesta"
++        android:id="@+id/lblSensorLuz"
++        android:text="Luz: "
++        android:layout_marginTop="20dp"
++        android:layout_marginLeft="20dp"
+         android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="Respuesta: ?"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.091"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/lblNum2"
+-        app:layout_constraintVertical_bias="0.169" />
+-
+-    <Spinner
+-        android:id="@+id/cboOpciones"
+-        android:entries="@array/opciones"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_marginLeft="35dp"
+-        app:layout_constraintBottom_toTopOf="@+id/btnCalcular"
+-        app:layout_constraintTop_toBottomOf="@+id/txtNum2"
+-        app:layout_constraintVertical_bias="0.26"
+-        tools:layout_editor_absoluteX="16dp" />
+-
+-    <Button
+-        android:id="@+id/btnCalcular"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:text="CALCULAR"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/txtNum2"
+-        app:layout_constraintVertical_bias="0.264"
+-        tools:layout_editor_absoluteX="0dp" />
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++        android:layout_height="wrap_content"/>
++</RelativeLayout>
+\ No newline at end of file
