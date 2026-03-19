@@ -1,112 +1,122 @@
 package com.example.miprimeraapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-
-    TextView tempVal;
-    Spinner spn;
+    DB db;
     Button btn;
-    Double valores[][] = {
-            {1.0, 0.85, 7.67, 26.42, 36.80, 495.77}, //monedas
-            {1.0, 1000.0, 100.0, 39.3701, 3.280841666667, 1.1963081929167, 1.09361}, //longitud
-            {1.0, 1000.0, 0.001, 1000.0, 0.264172, 0.219969, 33.814, 2.1138, 1.05669, 0.00628981}, //volumen
-            {
-                    1.0,           // Kilogramo (kg) - unidad base
-                    1000.0,        // Gramo (g)
-                    1000000.0,     // Miligramo (mg)
-                    100.0,         // Decagramo (dag)
-                    10.0,          // Hectogramo (hg)
-                    5000.0,        // Quilate (ct) - 1 kg = 5000 ct
-                    35.274,        // Onza (oz)
-                    2.20462,       // Libra (lb)
-                    0.157473,      // Stone (st)
-                    0.001          // Tonelada (t)
-            }, // Masa
-            {
-                    1.0,           // Bit (b)
-                    0.125,         // Byte (B)
-                    0.000125,      // Kilobyte (KB)
-                    1.25e-7,       // Megabyte (MB)
-                    1.25e-10,      // Gigabyte (GB)
-                    1.25e-13,      // Terabyte (TB)
-                    1.25e-16,      // Petabyte (PB)
-                    1.25e-19,      // Exabyte (EB)
-                    1.25e-22,      // Zettabyte (ZB)
-                    1.25e-25       // Yottabyte (YB)
-            }, // Almacenamiento
-    };
-    String[][] etiquetas = {
-            {"Dolar", "Euro", "Quetzal", "Lempira", "Cordoba", "Colon CR"}, //monedas
-            {"Mts", "Ml", "Cm", "Pulgada", "Pies", "Vara", "Yarda"}, //Longitud
-            {"Litro (L)", "Mililitro (mL)", "Metro cúbico (m³)", "Centímetro cúbico (cm³)", "Galón estadounidense (gal US)", "Galón imperial (gal UK)",
-                    "Onza líquida (fl oz)", "Pinta (pt)", "Cuarto (qt)", "Barril (bbl)"},  //volumen
-            {"Kilogramo (kg)", "Gramo (g)", "Miligramo (mg)", "Decagramo (dag)", "Hectogramo (hg)", "Quilate (ct)", "Onza (oz)",
-                    "Libra (lb)", "Stone (st)", "Tonelada (t)"}, // Masa
-            {"Bit (b)", "Byte (B)", "Kilobyte (KB)", "Megabyte (MB)", "Gigabyte (GB)", "Terabyte (TB)", "Petabyte (PB)", "Exabyte (EB)",
-                    "Zettabyte (ZB)", "Yottabyte (YB)"}, // almacenamiento
-    };
+    TextView tempVal;
+    String accion="nuevo", idAmigo="", urlFoto;
+    Intent tomarFotoIntent;
+    FloatingActionButton fab;
+    ImageView img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn = findViewById(R.id.btnConvertir);
-        btn.setOnClickListener(v->convertir());
+        img = findViewById(R.id.imgFotoAmigo);
+        img.setOnClickListener(v->tomarFoto());
 
-        cambiarEtiqueta(0);//valores predeterminaods
+        db = new DB(this);
 
-        spn = findViewById(R.id.spnTipo);
-        spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                cambiarEtiqueta(i);
+        btn = findViewById(R.id.btnGuardarAmigo);
+        btn.setOnClickListener(v->guardarAmigo());
+
+        fab = findViewById(R.id.fabListaAmigo);
+
+
+    }
+    private void tomarFoto(){
+        tomarFotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File fotoAmigo = null;
+
+        try{
+            fotoAmigo = crearImgAmigo();
+            if(fotoAmigo!=null){
+                Uri uriFoto = FileProvider.getUriForFile(MainActivity.this, "com.ugb.miprimeraapp.fileprovider", fotoAmigo);
+                tomarFotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriFoto);
+                startActivityForResult(tomarFotoIntent, 1);
+            }else{
+                mostrarMsg("Nose pudo crear la foto");
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+        } catch (Exception e) {
+            mostrarMsg("Error al tomar la foto: "+ e.getMessage());
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try{
+            if(requestCode==1 && resultCode==RESULT_OK){
+                img.setImageURI(Uri.parse(urlFoto));
+            }else{
+                mostrarMsg("No fue posible mostrar la foto");
             }
-        });
+        } catch (Exception e) {
+            mostrarMsg("Error en abrir la camara: "+ e.getMessage());
+        }
     }
-    private void cambiarEtiqueta(int posicion){
-        ArrayAdapter<String> aaEtiquetas = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                etiquetas[posicion]
-        );
-        aaEtiquetas.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spn = findViewById(R.id.spnDe);
-        spn.setAdapter(aaEtiquetas);
 
-        spn = findViewById(R.id.spnA);
-        spn.setAdapter(aaEtiquetas);
+    private File crearImgAmigo() throws Exception{
+        String fechaHoraMs = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()),
+                fileMane = "foto_"+ fechaHoraMs;
+        File dirAlmacenamiento = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+        if(dirAlmacenamiento.exists()==false){
+            dirAlmacenamiento.mkdir();
+        }
+        File image = File.createTempFile(fileMane, ".jpg", dirAlmacenamiento);
+        urlFoto = image.getAbsolutePath();
+        return image;
     }
-    private void convertir(){
-        spn = findViewById(R.id.spnTipo);
-        int tipo = spn.getSelectedItemPosition();
+    private void guardarAmigo(){
+        tempVal = findViewById(R.id.txtNombreAmigos);
+        String nombre = tempVal.getText().toString();
 
-        spn = findViewById(R.id.spnDe);
-        int de = spn.getSelectedItemPosition();
+        tempVal = findViewById(R.id.txtDireccionAmigos);
+        String direccion = tempVal.getText().toString();
 
-        spn = findViewById(R.id.spnA);
-        int a = spn.getSelectedItemPosition();
+        tempVal = findViewById(R.id.txtTelefonoAmigos);
+        String tel = tempVal.getText().toString();
 
-        tempVal = findViewById(R.id.txtCantidad);
-        double cantidad = Double.parseDouble(tempVal.getText().toString());
-        double respuesta = conversor(tipo, de, a, cantidad);
+        tempVal = findViewById(R.id.txtEmailAmigos);
+        String email = tempVal.getText().toString();
 
-        tempVal = findViewById(R.id.lblRespuesta);
-        tempVal.setText("Respuesta: "+ respuesta);
+        tempVal = findViewById(R.id.txtDuiAmigos);
+        String dui = tempVal.getText().toString();
+
+        String[] datos = {idAmigo, nombre, direccion, tel, email, dui, urlFoto};
+        db.administrar_amigos(accion, datos);
+        mostrarMsg("Registro de amigo guardado con exito.");
     }
-    double conversor(int tipo, int de, int a, double cantidad){
-        return valores[tipo][a]/valores[tipo][de] * cantidad;
+    private void mostrarMsg(String msg){
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }
