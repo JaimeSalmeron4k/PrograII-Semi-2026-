@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1001686694044",
+    "firebase_url": "https://practica-ugb-2026-j-default-rtdb.firebaseio.com",
+    "project_id": "practica-ugb-2026-j",
+    "storage_bucket": "practica-ugb-2026-j.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001686694044:android:8d16d834c45cdf25ba5559",
+        "android_client_info": {
+          "package_name": "com.example.miprimeraapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKwbHrqRNfXeMT7pAhc8O5khh6GAAz0zk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
