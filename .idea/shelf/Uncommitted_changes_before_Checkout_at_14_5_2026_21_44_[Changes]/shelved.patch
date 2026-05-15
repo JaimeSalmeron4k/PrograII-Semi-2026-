@@ -1,0 +1,31 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"></uses-permission>\r\n    <uses-permission android:name=\"android.permission.INTERNET\"></uses-permission>\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"></uses-permission>\r\n    <uses-feature android:name=\"android.hardware.camera\" android:required=\"true\"></uses-feature>\r\n    <application\r\n        android:usesCleartextTraffic=\"true\"\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.MiPrimeraApp\"\r\n        tools:targetApi=\"31\">\r\n        <activity\r\n            android:name=\".lista_amigos\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n\r\n        <provider\r\n            android:name=\"androidx.core.content.FileProvider\"\r\n            android:authorities=\"com.ugb.miprimeraapp.fileprovider\"\r\n            android:exported=\"false\"\r\n            android:grantUriPermissions=\"true\">\r\n            <meta-data\r\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\r\n                android:resource=\"@xml/file_paths\" />\r\n        </provider>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision cd3324a25ca9ab6c0007d19477e131476363395c)
++++ b/app/src/main/AndroidManifest.xml	(date 1778774022616)
+@@ -6,6 +6,20 @@
+     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+     <uses-feature android:name="android.hardware.camera" android:required="true"></uses-feature>
++    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
++    <uses-permission android:name="android.permission.INTERNET"/>
++    <uses-permission android:name="android.permission.VIBRATE"/>
++    <uses-permission android:name="android.permission.WAKE_LOCK"/>
++    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
++    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
++    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
++    <uses-permission android:name="android.permission.READ_SMS"/>
++    <uses-permission android:name="android.permission.SEND_SMS"/>
++    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
++    <uses-permission android:name="android.permission.CALL_PHONE"/>
++    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
++    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
++    <uses-permission android:name="com.google.android.c2dm.permission.RECIEVE"/>
+     <application
+         android:usesCleartextTraffic="true"
+         android:allowBackup="true"
