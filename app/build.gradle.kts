@@ -18,7 +18,17 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt"
+            )
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -40,6 +50,12 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation("com.google.firebase:firebase-database:22.0.1")
+    implementation("com.google.firebase:firebase-messaging:25.0.2")
+    implementation("com.google.firebase:firebase-storage:22.0.1")
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.13.0")
+    implementation("androidx.activity:activity:1.13.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -48,5 +64,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-database"))
     implementation(platform("com.google.firebase:firebase-messaging"))
     implementation(platform("com.google.firebase:firebase-storage"))
-    implementation(platform("com.firebaseui:firebase-ui-storage:9.0.0"))
-}
+    implementation("com.firebaseui:firebase-ui-storage:9.0.0")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
+    }
